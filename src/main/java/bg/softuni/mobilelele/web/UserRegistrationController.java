@@ -17,17 +17,17 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserRegistrationController {
 
-
     private final UserService userService;
 
-    public UserRegistrationController(UserService userService) {
 
+    public UserRegistrationController(UserService userService) {
         this.userService = userService;
+
     }
 
     @ModelAttribute("userModel")
-    public void initUserModel(Model model) {
-        model.addAttribute("userModel", new UserRegisterDTO());
+    public UserRegisterDTO initUserModel() {
+        return new UserRegisterDTO();
     }
 
     @GetMapping("/register")
@@ -37,18 +37,20 @@ public class UserRegistrationController {
 
     @PostMapping("/register")
     public String register(@Valid UserRegisterDTO userModel,
-                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes
+                           ) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("userModel", userModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel", bindingResult);
-
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel",
+                    bindingResult);
             return "redirect:/users/register";
-
         }
-        userService.registerAndLogin(userModel);
+
+        this.userService.registerAndLogin(
+                userModel);
 
         return "redirect:/";
     }
-    //TODO: Explain POST-redirect-Get
 }

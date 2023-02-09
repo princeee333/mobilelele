@@ -41,24 +41,5 @@ public class UserController {
     }
 
 
-    @GetMapping("/register")
-    public String register(){
-        return "auth-register";
-    }
-
-    @PostMapping("/register")
-    public String register(@Valid UserRegisterDTO userModel,
-                           BindingResult bindingResult){
-
-        if (bindingResult.hasErrors()){
-
-
-            return "redirect:/users/register";
-
-        }
-        userService.registerAndLogin(userModel);
-
-        return "redirect:/";
-    }
     //TODO: Explain POST-redirect-Get
 }
